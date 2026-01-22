@@ -1,22 +1,62 @@
-<div class="flex justify-between items-center my-8 p-x-4" th:fragment="pagination (items)">
-  <div>
-    <a
-      th:href="@{${items.prevUrl}}"
-      th:if="${items.hasPrevious()}"
-      class="pr-2.5 flex items-center cursor-default no-underline border border-solid border-2 borderc-primary p-1.5 text-sm rounded hover:bgc-primary hover:text-white transition duration-300"
-    >
-      <span class="i-material-symbols:chevron-left-rounded inline-block size-4 mt-0.25"></span>
-      <span class="text-inherit">Previous Page</span>
-    </a>
+<div
+  class="flex flex-col gap-4 my-8 p-x-4"
+  th:fragment="pagination (items)"
+  th:if="${items.totalPages > 1}"
+  x-data="pagination"
+  th:data-page="${items.page}"
+  th:data-total="${items.totalPages}"
+>
+  <!-- Original Prev/Next Buttons -->
+  <div class="flex justify-between items-center w-full">
+    <div>
+      <a
+        th:href="@{${items.prevUrl}}"
+        th:if="${items.hasPrevious()}"
+        class="pr-2.5 flex items-center cursor-default no-underline border border-solid border-2 borderc-primary p-1.5 text-sm rounded hover:bgc-primary hover:text-white transition duration-300"
+      >
+        <span class="i-material-symbols:chevron-left-rounded inline-block size-4 mt-0.25"></span>
+        <span class="text-inherit">Previous Page</span>
+      </a>
+    </div>
+    <div>
+      <a
+        th:href="@{${items.nextUrl}}"
+        th:if="${items.hasNext()}"
+        class="pl-2.5 flex items-center cursor-default no-underline border border-solid border-2 borderc-primary p-1.5 text-sm rounded hover:bgc-primary hover:text-white transition duration-300"
+      >
+        <span class="text-inherit">Next Page</span>
+        <span class="i-material-symbols:chevron-right-rounded inline-block size-4 mt-0.25"></span>
+      </a>
+    </div>
   </div>
-  <div>
-    <a
-      th:href="@{${items.nextUrl}}"
-      th:if="${items.hasNext()}"
-      class="pl-2.5 flex items-center cursor-default no-underline border border-solid border-2 borderc-primary p-1.5 text-sm rounded hover:bgc-primary hover:text-white transition duration-300"
-    >
-      <span class="text-inherit">Next Page</span>
-      <span class="i-material-symbols:chevron-right-rounded inline-block size-4 mt-0.25"></span>
-    </a>
+
+  <!-- Numeric Pagination & Jump -->
+  <div class="flex flex-wrap items-center justify-center gap-2 w-full">
+    <template x-for="page in pages">
+      <a
+        x-if="page !== '...'"
+        :href="makeUrl(page)"
+        x-text="page"
+        class="min-w-8 h-8 flex items-center justify-center border border-solid border-2 borderc-primary rounded text-sm no-underline transition duration-300 cursor-pointer"
+        :class="page === current ? 'bgc-primary text-white' : 'text-inherit hover:bgc-primary hover:text-white'"
+      ></a>
+      <span x-if="page === '...'" class="text-gray-500">...</span>
+    </template>
+
+    <div class="flex items-center gap-2 ml-2">
+      <input
+        type="number"
+        min="1"
+        :max="total"
+        class="w-12 h-8 border border-solid border-2 borderc-primary rounded text-center text-sm outline-none focus:ring-1 focus:ring-primary bg-transparent"
+        @keyup.enter="jump(parseInt($el.value))"
+      />
+      <button
+        @click="jump(parseInt($el.previousElementSibling.value))"
+        class="h-8 px-2 border border-solid border-2 borderc-primary rounded text-sm hover:bgc-primary hover:text-white transition duration-300 cursor-pointer"
+      >
+        Go
+      </button>
+    </div>
   </div>
 </div>

@@ -16,7 +16,46 @@
     </script>
   </head>
 
-  <body x-data="prefersColorScheme" x-bind:class="colorScheme" class="color-scheme-auto min-h-screen flex flex-col">
+  <body
+    x-data="prefersColorScheme"
+    x-bind:class="colorScheme"
+    class="color-scheme-auto min-h-screen flex flex-col relative"
+  >
+    <!-- Halo Official Search Plugin Integration (Floating Action Button) -->
+    <div
+      th:if="${pluginFinder.available('PluginSearchWidget')}"
+      class="fixed bottom-8 right-8 z-40"
+      style="position: fixed; bottom: 2rem; right: 2rem"
+    >
+      <button
+        onclick="SearchWidget.open()"
+        class="bg-transparent border-none cursor-pointer p-0 transition-all duration-300 hover:scale-110 active:scale-95 group"
+        title="Search"
+        style="-webkit-tap-highlight-color: transparent"
+      >
+        <svg
+          width="64"
+          height="64"
+          viewBox="0 0 64 64"
+          fill="none"
+          xmlns="http://www.w3.org/2000/svg"
+          style="filter: drop-shadow(0 4px 12px rgba(0, 0, 0, 0.15)); transition: filter 0.3s"
+          onmouseover="this.style.filter='drop-shadow(0 8px 20px rgba(0,0,0,0.25))'"
+          onmouseout="this.style.filter='drop-shadow(0 4px 12px rgba(0,0,0,0.15))'"
+        >
+          <!-- Outer Circle with subtle gradient feel -->
+          <circle cx="32" cy="32" r="28" fill="var(--primary-color)" />
+          <!-- Icon - Visually adjusted to center the weight -->
+          <g transform="translate(19, 19)">
+            <path
+              d="M12.5 4C7.81 4 4 7.81 4 12.5C4 17.19 7.81 21 12.5 21C14.41 21 16.15 20.37 17.56 19.32L23.12 24.88C23.31 25.07 23.56 25.17 23.82 25.16C24.08 25.15 24.32 25.04 24.49 24.85C24.67 24.67 24.77 24.42 24.76 24.16C24.75 23.9 24.64 23.66 24.45 23.49L18.91 17.93C20.1 16.53 20.84 14.73 21 12.82C21.17 8.16 17.53 4.22 12.87 4.01C12.75 4 12.63 4 12.5 4ZM12.5 6C16.1 6 19 8.9 19 12.5C19 16.1 16.1 19 12.5 19C8.9 19 6 16.1 6 12.5C6 8.9 8.9 6 12.5 6Z"
+              fill="white"
+            />
+          </g>
+        </svg>
+      </button>
+    </div>
+
     <main class="flex-grow">
       <div>
         <th:block th:replace="${header}" />
