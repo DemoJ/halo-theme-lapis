@@ -6,6 +6,12 @@
   th:data-page="${items.page}"
   th:data-total="${items.totalPages}"
 >
+  <style>
+    .pagination-btn:hover {
+      color: #ffffff !important;
+    }
+  </style>
+
   <!-- Original Prev/Next Buttons -->
   <div class="flex justify-between items-center w-full">
     <div>
@@ -31,16 +37,24 @@
   </div>
 
   <!-- Numeric Pagination & Jump -->
+
   <div class="flex flex-wrap items-center justify-center gap-2 w-full">
     <template x-for="page in pages">
-      <a
-        x-if="page !== '...'"
-        :href="makeUrl(page)"
-        x-text="page"
-        class="min-w-8 h-8 flex items-center justify-center border border-solid border-2 borderc-primary rounded text-sm no-underline transition duration-300 cursor-pointer"
-        :class="page === current ? 'bgc-primary text-white' : 'text-inherit hover:bgc-primary hover:text-white'"
-      ></a>
-      <span x-if="page === '...'" class="text-gray-500">...</span>
+      <div class="flex items-center">
+        <template x-if="page !== '...'">
+          <a
+            :href="makeUrl(page)"
+            x-text="page"
+            class="pagination-btn min-w-8 h-8 flex items-center justify-center border border-solid border-2 borderc-primary rounded text-sm no-underline transition duration-300 cursor-pointer"
+            :class="page === current ? 'bgc-primary !text-white' : 'text-inherit hover:bgc-primary'"
+            :style="page === current ? 'color: white !important' : ''"
+          ></a>
+        </template>
+
+        <template x-if="page === '...'">
+          <span class="px-2 text-gray-500">...</span>
+        </template>
+      </div>
     </template>
 
     <div class="flex items-center gap-2 ml-2">
